@@ -19,6 +19,7 @@ Nu2 = Nu1 + theta;
 % PrandtlMeyerAngles matrix and find it's adjacent Mach number value
 n = 200; % number of entries to calculate in MeyerAgainstMach
 
+% this generates big matrix
 MeyerAgainstMach = PrandtlMeyer("yes", n); % second column is the angles, first is M
 
 % comparing the value Nu2 to the values in the second column of above func
