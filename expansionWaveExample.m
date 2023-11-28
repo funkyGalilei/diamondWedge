@@ -25,18 +25,31 @@ MeyerAgainstMach = PrandtlMeyer("yes", n); % second column is the angles, first 
 % comparing the value Nu2 to the values in the second column of above func
 % to get M2 - within a certain percent, do it manually
 M2 = 0;
+assigned = 0;
 
 for i = 1:n
     % a bunch of percent difference math here, with an output of BOOL, so the if 
     % statement can just take that
     percentDifference = abs(Nu2 - MeyerAgainstMach(i, 2))/(Nu2)*100;
     
-     if percentDifference < 10
+    boolValue = percentDifference < 10;
+
+     if boolValue
         M2 = MeyerAgainstMach(i, 1);
         % very likely to have two or multiple values within this range, so
         % displaying closest matrix entries for understanding
+        disp("percent difference value that works:")
         disp(MeyerAgainstMach(i, 1))
+        % this is just to check if a value got assigned at all - if not, we
+        % gotta display an error to the command line for clarity
+
+        assigned = 1;
+
     end
+end
+
+if assigned == 0
+    disp("no value is assigned to M2, percent difference")
 end
 
 % this is eq 9.45, used to find the ratio between downstream pressure and

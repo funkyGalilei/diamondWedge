@@ -33,5 +33,9 @@ thetaBetaMach = importdata(filename);
 % now that the data is imported, graph, then do regression analysis so the
 % answers can be more accurate?
 
-plot(thetaBetaMach.data(:, 3), thetaBetaMach.data(:, 2))
+figure
+    plot(thetaBetaMach.data(:, 2), thetaBetaMach.data(:, 4), LineWidth=3)
+    title("Beta and Mach at a constant Theta of 5 degrees")
+    xlabel("Beta [degrees]")
+    ylabel("Mach Number")
 
