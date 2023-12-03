@@ -1,11 +1,14 @@
 clc,clear
 
+% this is the main function that will call all other functions
+
 %% Getting Inputs
 % Variables and Initial Conditions
 
 prompt = {'Gamma (\gamma)','Incoming Mach Number (M1)', 'Epsilon (\epsilon)', 'Alpha (\alpha)'};
 dlgTitle = 'Gamma, Theta, and freestream Mach Number';
-fieldsize = [1 50; 1 50; 1 50; 1 50];
+num = 80;
+fieldsize = [1 num; 1 num; 1 num; 1 num];
 
 % values automatically entered so we can test run easier without manual
 % input
@@ -15,14 +18,15 @@ epsilon = '15';
 alpha = '10';
 definput = {gamma, M1, epsilon, alpha};
 opts.Interpreter = 'tex';
+opts.resize = 'on';
 
 something = inputdlg(prompt, dlgTitle, fieldsize, definput, opts);
 
 % converting back from string
-gamma = str2num(something{1, 1});
-M1 = str2num(something{2, 1});
-epsilon = str2num(something{3, 1});
-alpha = str2num(something{4, 1});
+gamma = str2double(something{1, 1});
+M1 = str2double(something{2, 1});
+epsilon = str2double(something{3, 1});
+alpha = str2double(something{4, 1});
 
 %% COMPRESSION WAVE
 
@@ -41,26 +45,31 @@ if alpha < epsilon
 end
 
 %% EXPANSION WAVE
-if alpha > epsilon
-    theta = alpha - epsilon;
-    M2 = 0; %initializing the M2 variable
-    n = 1000; %number of iterations 
+% first block is Matthew's code, second block is Dillon's
 
-    Nu1 = Nu(M1); %Calculating Nu1 using the Nu function at freestream mach
-    Nu2 = Nu1 + theta; %Calculating Nu2 using Nu1 and theta
+% if alpha > epsilon
+%     theta = alpha - epsilon;
+%     M2 = 0; %initializing the M2 variable
+%     n = 1000; %number of iterations 
+% 
+%     Nu1 = Nu(M1); %Calculating Nu1 using the Nu function at freestream mach
+%     Nu2 = Nu1 + theta; %Calculating Nu2 using Nu1 and theta
+% 
+%     MeyerAgainstMach = PrandtlMeyer("no", n); %Outputting the corresponding mach number and Nu value
+% 
+%     for i = 1:n
+%         percentDifference = abs(Nu2 - MeyerAgainstMach(i, 2))/(Nu2)*100;
+% 
+%         if percentDifference < 1
+%             M2 = MeyerAgainstMach(i, 1);
+%         end
+%     end
+% end
 
-    MeyerAgainstMach = PrandtlMeyer("no", n); %Outputting the corresponding mach number and Nu value
-
-    for i = 1:n
-        percentDifference = abs(Nu2 - MeyerAgainstMach(i, 2))/(Nu2)*100;
-
-        if percentDifference < 1
-            M2 = MeyerAgainstMach(i, 1);
-        end
-    end
-end
+pressureRatio = expansionWave(M1, theta, gamma, n);
 
 %% NORMAL SHOCK WAVE
+
 if alpha == epsilon
     disp('NSW')
 end
