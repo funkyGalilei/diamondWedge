@@ -1,12 +1,31 @@
 clc,clear
 
-%Variables and Initial Conditions
-gamma = 1.4;
-M1 = 3.2;
-epsilon = 15;
-alpha = 10;
+%% Getting Inputs
+% Variables and Initial Conditions
+
+prompt = {'Gamma (\gamma)','Incoming Mach Number (M1)', 'Epsilon (\epsilon)', 'Alpha (\alpha)'};
+dlgTitle = 'Gamma, Theta, and freestream Mach Number';
+fieldsize = [1 50; 1 50; 1 50; 1 50];
+
+% values automatically entered so we can test run easier without manual
+% input
+gamma = '1.4';
+M1 = '3.2';
+epsilon = '15';
+alpha = '10';
+definput = {gamma, M1, epsilon, alpha};
+opts.Interpreter = 'tex';
+
+something = inputdlg(prompt, dlgTitle, fieldsize, definput, opts);
+
+% converting back from string
+gamma = str2num(something{1, 1});
+M1 = str2num(something{2, 1});
+epsilon = str2num(something{3, 1});
+alpha = str2num(something{4, 1});
 
 %% COMPRESSION WAVE
+
 if alpha < epsilon
 
     theta = epsilon - alpha;
@@ -23,7 +42,6 @@ end
 
 %% EXPANSION WAVE
 if alpha > epsilon
-
     theta = alpha - epsilon;
     M2 = 0; %initializing the M2 variable
     n = 1000; %number of iterations 
